@@ -1,6 +1,6 @@
 # StockControl
 
-- Segundo projeto do [Curso Formação Angular - Marcos Júnior Passarella Naves](https://www.udemy.com/course/curso-de-angular-15-do-iniciante-ao-especialista) - (Udemy)
+Segundo projeto do [Curso Formação Angular - Marcos Júnior Passarella Naves](https://www.udemy.com/course/curso-de-angular-15-do-iniciante-ao-especialista) - (Udemy)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.0.
 
