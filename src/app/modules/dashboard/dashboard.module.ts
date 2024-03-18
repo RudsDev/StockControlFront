@@ -18,6 +18,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { DashboardHomeComponent } from './page/dashboard-home/dashboard-home.component';
 
 import { DASHBOARD_ROUTES } from './dashoboard.routing';
+import { SharedModule } from '../../shared/shared.module';
 
 
 
@@ -27,6 +28,7 @@ import { DASHBOARD_ROUTES } from './dashoboard.routing';
     DashboardHomeComponent
   ],
   imports: [
+    SharedModule,
     ChartModule,
     CommonModule,
     FormsModule,
