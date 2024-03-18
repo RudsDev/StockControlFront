@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -79,7 +80,7 @@ export class HomeComponent {
 
   private handleSuccessAuth(resp: AuthResponse):void {
     if(!resp) return
-    this.cookieService.set('USER_INFO', resp.token)
+    this.cookieService.set(environment.USER_COOKIE, resp.token)
     this.loginForm.reset()
     this.messageService.add({
       severity: 'success',
