@@ -27,12 +27,14 @@ import { SharedModule } from '../../shared/shared.module';
 import { PRODUCTS_ROUTES } from './products.routing';
 
 import { ProductsHomeComponent } from './page/products-home/products-home.component';
+import { ProductsTableComponent } from './components/products-table/products-table.component';
 
 
 
 @NgModule({
   declarations: [
-    ProductsHomeComponent
+    ProductsHomeComponent,
+    ProductsTableComponent
   ],
   imports: [
     SharedModule,
