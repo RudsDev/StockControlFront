@@ -19,6 +19,11 @@ const routes: Routes = [
     canActivate: [AuthGuardRouteService],
     loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule) //lazy loading
   },
+  {
+    path: 'products',
+    canActivate: [AuthGuardRouteService],
+    loadChildren: () => import('./modules/products/products.module').then(m => m.ProductsModule) //lazy loading
+  },
 ];
 
 @NgModule({
