@@ -7,6 +7,7 @@ import { ProductsDataTransferService } from '../../../../shared/services/product
 import { ProductsService } from '../../../../services/products/products.service';
 
 import { GetAllProductsResponse } from '../../../../models/interfaces/products/response/GetAllProductsResponse';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -16,6 +17,7 @@ import { GetAllProductsResponse } from '../../../../models/interfaces/products/r
 export class DashboardHomeComponent implements OnInit{
 
   public productList: Array<GetAllProductsResponse> = []
+  public observbleTest$ = new Observable()
 
   constructor(
     private productService: ProductsService,
