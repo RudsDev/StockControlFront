@@ -1,6 +1,6 @@
 import { environment } from '../../../environments/environment';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SignupUserRequest } from '../../models/interfaces/user/SignupUserRequest';
 import { SignupUserResponse } from '../../models/interfaces/user/SignupUserRespose';
@@ -10,13 +10,15 @@ import { AuthResponse } from '../../models/interfaces/user/auth/AuthResponse';
 import { CookieService } from 'ngx-cookie-service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements OnDestroy {
+  private readonly destroy$: Subject<void> = new Subject()
   loginCard = true
 
   loginForm = this.formBuilder.group({
@@ -53,6 +55,7 @@ export class HomeComponent {
     if(this.loginForm.invalid) return
     this.userService
       .authUser(this.formToAuthRequest())
+      .pipe(takeUntil(this.destroy$))
       .subscribe(this.authUserObservableHandler)
 
   }
@@ -62,6 +65,7 @@ export class HomeComponent {
     if(this.signupForm.invalid) return
     this.userService
       .signupUser(this.formToSignupUser())
+      .pipe(takeUntil(this.destroy$))
       .subscribe(this.signupUserObservableHandler)
   }
 
@@ -123,6 +127,11 @@ export class HomeComponent {
       life: 2000
     });
     console.log(error.error)
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete()
   }
 
 }

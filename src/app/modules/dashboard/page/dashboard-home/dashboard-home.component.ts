@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { MessageService } from 'primeng/api';
@@ -7,15 +7,16 @@ import { ProductsDataTransferService } from '../../../../shared/services/product
 import { ProductsService } from '../../../../services/products/products.service';
 
 import { GetAllProductsResponse } from '../../../../models/interfaces/products/response/GetAllProductsResponse';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-home',
   templateUrl: './dashboard-home.component.html',
   styleUrl: './dashboard-home.component.scss'
 })
-export class DashboardHomeComponent implements OnInit{
+export class DashboardHomeComponent implements OnInit, OnDestroy{
 
+  private readonly destroy$: Subject<void> = new Subject()
   public productList: Array<GetAllProductsResponse> = []
   public observbleTest$ = new Observable()
 
@@ -32,6 +33,7 @@ export class DashboardHomeComponent implements OnInit{
   getProductsDatas(): void {
     this.productService
       .getAllProducts()
+      .pipe(takeUntil(this.destroy$))
       .subscribe(this.productsDatasObservableHandler)
   }
 
@@ -58,5 +60,9 @@ export class DashboardHomeComponent implements OnInit{
     console.log(error.error)
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete()
+  }
 
 }
