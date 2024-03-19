@@ -11,6 +11,7 @@ import { ProductsService } from '../../../../services/products/products.service'
 import { ProductsDataTransferService } from '../../../../shared/services/products/products-data-transfer.service';
 
 import { GetAllProductsResponse } from '../../../../models/interfaces/products/response/GetAllProductsResponse';
+import { ProductEventAction } from '../../../../models/interfaces/products/event/ProductEventAction';
 
 @Component({
   selector: 'app-products-home',
@@ -35,6 +36,10 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
   private productsDatasObservableHandler = {
     next: (resp: GetAllProductsResponse[]) => this.handleSuccessProductsDatas(resp),
     error: (error: HttpErrorResponse) => this.handleErrorProductsDatas(error),
+  }
+
+  public handleProductAction(event: ProductEventAction): void {
+    console.log(event)
   }
 
   private getServiceProductsDatas(): void {
