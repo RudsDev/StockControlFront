@@ -48,7 +48,6 @@ export class DashboardHomeComponent implements OnInit, OnDestroy{
   }
 
   private handleSuccessProductsDatas(response: GetAllProductsResponse[]) {
-    console.log(response)
     if(response.length) {
       this.productList = response
       this.productsDataTransferService.setProductsDatas(this.productList);
