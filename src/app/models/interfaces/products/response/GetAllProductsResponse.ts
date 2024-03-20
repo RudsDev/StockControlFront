@@ -1,7 +1,7 @@
 export interface GetAllProductsResponse {
 
   id: string,
-  name: String,
+  name: string,
   description: string,
   price: string,
   amount: number,

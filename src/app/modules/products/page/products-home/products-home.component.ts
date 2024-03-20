@@ -58,15 +58,16 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
         header: event?.action,
         width: '70%',
         contentStyle: {
-          overflow: 'auto',
-          baseZIndex: 10000,
-          maximizable: true,
-          data: {
-            event,
-            productDatas: this.productList
-          }
+          overflow: 'auto'
+        },
+        baseZIndex: 10000,
+        maximizable: true,
+        data: {
+          event,
+          productDatas: this.productList
         }
-      }
+       }
+
     )
     this.dialogRef
       .onClose
