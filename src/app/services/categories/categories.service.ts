@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { GetAllCategoriesResponse } from '../../models/interfaces/categories/response/GetAllCategoriesResponse';
 import { CreateCategoryResponse } from '../../models/interfaces/categories/response/CreateCategoryResponse';
 import { CreateCategoryRequest } from '../../models/interfaces/categories/request/CreateCategoryRequest';
+import { EditCategoryRequest } from '../../models/interfaces/categories/request/EditCategoryRequest';
 
 import { Observable } from 'rxjs';
 
@@ -45,5 +46,18 @@ export class CategoriesService {
       categoryData,
       this.httpOptions
     )
+  }
+
+  editProduct(categoryData: EditCategoryRequest): Observable<void> {
+    return this.http.put<void>(
+      `${this.API_URL}/category/edit`,
+      { name: categoryData?.name },
+      {
+        ...this.httpOptions,
+        params: {
+          category_id: categoryData?.category_id,
+        },
+      }
+    );
   }
 }

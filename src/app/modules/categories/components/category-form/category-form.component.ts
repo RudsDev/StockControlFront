@@ -32,7 +32,12 @@ export class CategoryFormComponent implements OnInit, OnDestroy {
   })
 
   ngOnInit(): void {
-
+    this.categoryAction = this.ref.data
+    const isValidValue = this.categoryAction.event.action === this.editCategoryEvent
+      && !!this.categoryAction.event.categoryName;
+    if(isValidValue) {
+      this.setCategoryName(this.categoryAction.event.categoryName as string)
+    }
   }
 
   constructor(
@@ -46,6 +51,23 @@ export class CategoryFormComponent implements OnInit, OnDestroy {
   private categoryCreateObservableHandler = {
     next: (resp: CreateCategoryResponse) => this.handleSuccessProductCreate(resp),
     error: (error: HttpErrorResponse) => this.handleErrorCategoryCreate(error),
+  }
+
+  private categoryEditObservableHandler = {
+    next: () => this.handleSuccessProductEdit(),
+    error: (error: HttpErrorResponse) => this.handleErrorCategoryEdit(error),
+  }
+
+  setCategoryName(name: string) {
+    name && this.categoryAddForm.setValue({ name })
+  }
+
+  handleSubmitEventCategory() {
+    if(this.categoryAction.event.action === this.addCategoryEvent)
+      this.handleSubmitAddCategory()
+    else if(this.categoryAction.event.action === this.editCategoryEvent)
+      this.handleSubmitEditCategory()
+    return
   }
 
   handleSubmitAddCategory():void {
@@ -75,6 +97,37 @@ export class CategoryFormComponent implements OnInit, OnDestroy {
       severity: 'error',
       summary: 'Erro',
       detail: 'Erro ao criar categoria.',
+      life: 2000
+    });
+  }
+
+  handleSubmitEditCategory():void {
+    if(!this.categoryAddForm?.value || this.categoryAddForm.invalid) return
+    this.categoryService
+      .editProduct({
+        name: this.categoryAddForm.value.name as string,
+        category_id: this.categoryAction.event.id as string
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(this.categoryEditObservableHandler)
+    this.categoryAddForm.reset()
+  }
+
+  private handleSuccessProductEdit() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Categoria editada com sucesso.',
+      life: 2000
+    });
+  }
+
+  private handleErrorCategoryEdit(error: HttpErrorResponse) {
+    console.log(error.error)
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Erro',
+      detail: 'Erro ao editar categoria.',
       life: 2000
     });
   }
