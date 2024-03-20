@@ -44,6 +44,8 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   public editProductEvent = ProductEvent.EDIT_PRODUCT_ITEM
   public saleProductEvent = ProductEvent.SALE_PRODUCT_ITEM
 
+  public renderDropDown = false
+
   public productAddForm = this.formBuilder.group({
     name: ['', Validators.required],
     price: ['', Validators.required],
@@ -56,21 +58,19 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     name: ['', Validators.required],
     price: ['', Validators.required],
     description: ['', Validators.required],
+    category_id: ['', Validators.required],
     amount: [0, Validators.required],
   })
 
   ngOnInit(): void {
     this.productAction = this.ref.data
-    const hasData = this.productAction?.event?.action === this.editProductEvent
-      && !!this.productAction?.productDatas
-    if (hasData) {
-        this.getProductSelected(this.productAction?.event?.id as string);
-    }
+    this.getProductToEdit();
 
     this.productAction?.event?.action === this.saleProductEvent &&
       this.getProductDatas();
 
     this.getAllCategories()
+    this.renderDropDown = true
   }
 
   constructor(
@@ -103,6 +103,14 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     error: (error: HttpErrorResponse) => this.handleErrorProductGetAll(error),
   }
 
+  private getProductToEdit() {
+    const hasData = this.productAction?.event?.action === this.editProductEvent
+      && !!this.productAction?.productDatas;
+    if (hasData) {
+      this.getProductSelected(this.productAction?.event?.id as string);
+    }
+  }
+
   getAllCategories() {
     this.categoriesService
       .getAllCategories()
@@ -121,6 +129,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
         name: this.selectedDatas?.name,
         price: this.selectedDatas?.price,
         description: this.selectedDatas?.description,
+        category_id: this.selectedDatas?.category.id,
         amount: this.selectedDatas?.amount
       })
     }
@@ -146,6 +155,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   private handleSuccessGetCategories(resp: GetAllCategoriesResponse[]) {
     if(!resp?.length) return
     this.categoriesDatas = resp
+    this.getProductToEdit()
   }
 
   private handleErrorGetCategories(error: HttpErrorResponse) {
@@ -223,6 +233,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   private createEditProductRequest(): EditProductRequest {
     return {
       product_id: this.productAction.event.id as string,
+      category_id: this.productEditForm?.value.category_id as string,
       name: this.productEditForm.value.name as string,
       price: this.productEditForm.value.price as string,
       description: this.productEditForm.value.description as string,
