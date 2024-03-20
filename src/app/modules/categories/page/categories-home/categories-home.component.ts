@@ -40,6 +40,11 @@ export class CategoriesHomeComponent implements OnInit, OnDestroy {
     error: (error: HttpErrorResponse) => this.handleErrorGetCategories(error),
   }
 
+  private categoryDeleteObservableHandler = {
+    next: () => this.handleSuccessProductDelete(),
+    error: (error: HttpErrorResponse) => this.handleErrorCategoryDelete(error),
+  }
+
   private getAllCategories() {
     this.categoriesService
       .getAllCategories()
@@ -62,6 +67,46 @@ export class CategoriesHomeComponent implements OnInit, OnDestroy {
       life: 2000
     });
     this.router.navigate(['/dashboard'])
+  }
+
+  public handleDeleteCategoryEvent(event: { id: string, name: string }): void {
+    if(!event)return
+      this.confirmationService.confirm({
+        header: 'Confirmação de remoção',
+        message: `Confirma a remoção da categoria ${event.name}?`,
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Sim',
+        rejectLabel: 'Não',
+        accept: () => this.deleteCategory(event.id)
+      })
+  }
+
+  private deleteCategory(id: string) {
+    if(!id)return
+    this.categoriesService
+      .deleteCategory(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(this.categoryDeleteObservableHandler)
+      this.getAllCategories();
+  }
+
+  private handleSuccessProductDelete() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Categoria removida com sucesso.',
+      life: 2000
+    });
+  }
+
+  private handleErrorCategoryDelete(error: HttpErrorResponse) {
+    console.log(error.error)
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Erro',
+      detail: 'Erro ao remover categoria.',
+      life: 2000
+    });
   }
 
   ngOnDestroy(): void {
