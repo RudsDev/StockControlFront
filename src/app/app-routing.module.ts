@@ -24,6 +24,11 @@ const routes: Routes = [
     canActivate: [AuthGuardRouteService],
     loadChildren: () => import('./modules/products/products.module').then(m => m.ProductsModule) //lazy loading
   },
+  {
+    path: 'categories',
+    canActivate: [AuthGuardRouteService],
+    loadChildren: () => import('./modules/categories/categories.module').then(m => m.CategoriesModule) //lazy loading
+  },
 ];
 
 @NgModule({
