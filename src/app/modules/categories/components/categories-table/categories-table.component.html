@@ -1,0 +1,85 @@
+<div class="grid">
+  <div class="col-12">
+    <p-card
+      header="Categorias de produtos"
+      styleClass="shadow-3 m-5 text-indigo-800"
+    >
+      <p-table
+        #categoriesTable
+        dataKey="id"
+        currentPageReportTemplate="Mostrand {first} de {last} de {totalRecords} categorias"
+        [rows]="10"
+        [paginator]="true"
+        [rowHover]="true"
+        [showCurrentPageReport]="true"
+        [tableStyle]="{ 'min-width': '75rem' }"
+        [value]="categories"
+        [(selection)]="categorieSelected"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="name">
+              <div class="flex justify-content-between align-items-center">
+                <div class="flex justify-content-between align-items-center">
+                  Nome
+                </div>
+                <div class="flex justify-content-between align-items-center">
+                  <p-sortIcon field="name"></p-sortIcon>
+                  <p-columnFilter
+                    type="text"
+                    field="name"
+                    display="menu"
+                    matchMode="contains"
+                    [showMatchModes]="false"
+                    [showOperator]="false"
+                    [showAddButton]="false"
+                  ></p-columnFilter>
+                </div>
+              </div>
+            </th>
+
+            <th>
+              <div class="flex justify-content-center">
+                <p-button
+                  styleClass="p-button-info"
+                  icon="pi pi-plus"
+                  label="Adicionar"
+                  pTooltip="Adicionar categoria"
+                  tooltipPosition="top"
+                ></p-button>
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-category>
+          <tr>
+            <td>{{ category.name }}</td>
+            <td>
+              <div
+              class="flex justify-content-center align-content-center align-items-center gap-3"
+            >
+              <button
+                pButton
+                pRipple
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-warning"
+                tooltipPosition="top"
+                pTooltip="Editar categoria"
+              ></button>
+              <button
+                pButton
+                pRipple
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger"
+                tooltipPosition="top"
+                pTooltip="Remover categoria"
+              ></button>
+            </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>
