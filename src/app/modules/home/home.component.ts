@@ -51,7 +51,6 @@ export class HomeComponent implements OnDestroy {
   ){}
 
   onSubmitAuth():void {
-    console.log(this.loginForm.value)
     if(this.loginForm.invalid) return
     this.userService
       .authUser(this.formToAuthRequest())
@@ -61,7 +60,6 @@ export class HomeComponent implements OnDestroy {
   }
 
   onSubmitSignup():void {
-    console.log(this.signupForm.value)
     if(this.signupForm.invalid) return
     this.userService
       .signupUser(this.formToSignupUser())
@@ -108,7 +106,6 @@ export class HomeComponent implements OnDestroy {
   }
 
   private handleSuccessSignup(resp: SignupUserResponse):void {
-    console.log(resp)
     this.signupForm.reset()
     this.loginCard = true
     this.messageService.add({
