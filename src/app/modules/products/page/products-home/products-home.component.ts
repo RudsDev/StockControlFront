@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { Router } from '@angular/router';
 
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { Subject, takeUntil } from 'rxjs';
@@ -14,6 +15,8 @@ import { GetAllProductsResponse } from '../../../../models/interfaces/products/r
 import { DeleteProductsResponse } from '../../../../models/interfaces/products/response/DeleteProductsResponse';
 import { ProductEventAction } from '../../../../models/interfaces/products/event/ProductEventAction';
 
+import { ProductFormComponent } from '../../components/product-form/product-form.component';
+
 @Component({
   selector: 'app-products-home',
   templateUrl: './products-home.component.html',
@@ -21,6 +24,7 @@ import { ProductEventAction } from '../../../../models/interfaces/products/event
 })
 export class ProductsHomeComponent implements OnInit, OnDestroy {
   private readonly destroy$: Subject<void> = new Subject()
+  private dialogRef!:DynamicDialogRef
   public productList: Array<GetAllProductsResponse> = []
 
   ngOnInit(): void {
@@ -33,6 +37,7 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
     private productsDataTransferService: ProductsDataTransferService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private dialogService: DialogService
   ){}
 
   private productsDatasObservableHandler = {
@@ -46,7 +51,29 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
   }
 
   public handleProductAction(event: ProductEventAction): void {
-    console.log(event)
+    if(!event) return
+    this.dialogRef = this.dialogService.open(
+      ProductFormComponent,
+      {
+        header: event?.action,
+        width: '70%',
+        contentStyle: {
+          overflow: 'auto',
+          baseZIndex: 10000,
+          maximizable: true,
+          data: {
+            event,
+            productDatas: this.productList
+          }
+        }
+      }
+    )
+    this.dialogRef
+      .onClose
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.getProductsDatasFromApi()
+      })
   }
 
   public handleDeleteProductAction(event: { id: string, name: string }): void {

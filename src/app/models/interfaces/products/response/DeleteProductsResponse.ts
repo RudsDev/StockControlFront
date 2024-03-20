@@ -5,5 +5,5 @@ export interface DeleteProductsResponse {
   price: string,
   description: string,
   amount: number,
-  categoryId: string,
+  category_id: string,
 }

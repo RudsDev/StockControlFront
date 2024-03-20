@@ -28,13 +28,15 @@ import { PRODUCTS_ROUTES } from './products.routing';
 
 import { ProductsHomeComponent } from './page/products-home/products-home.component';
 import { ProductsTableComponent } from './components/products-table/products-table.component';
+import { ProductFormComponent } from './components/product-form/product-form.component';
 
 
 
 @NgModule({
   declarations: [
     ProductsHomeComponent,
-    ProductsTableComponent
+    ProductsTableComponent,
+    ProductFormComponent
   ],
   imports: [
     SharedModule,
