@@ -116,7 +116,6 @@ export class ProductsHomeComponent implements OnInit, OnDestroy {
     if(response?.length) {
       this.productList = response
     }
-    console.log(this.productList)
   }
 
   private handleErrorProductsDatas(error: HttpErrorResponse) {
