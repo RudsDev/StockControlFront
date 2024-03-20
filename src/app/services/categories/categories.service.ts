@@ -4,6 +4,9 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { environment } from '../../../environments/environment';
 import { GetAllCategoriesResponse } from '../../models/interfaces/categories/response/GetAllCategoriesResponse';
+import { CreateCategoryResponse } from '../../models/interfaces/categories/response/CreateCategoryResponse';
+import { CreateCategoryRequest } from '../../models/interfaces/categories/request/CreateCategoryRequest';
+
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -36,4 +39,11 @@ export class CategoriesService {
     })
   }
 
+  createCategory(categoryData: CreateCategoryRequest): Observable<CreateCategoryResponse> {
+    return this.http.post<CreateCategoryResponse>(
+      `${this.API_URL}/category`,
+      categoryData,
+      this.httpOptions
+    )
+  }
 }
