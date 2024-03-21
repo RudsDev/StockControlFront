@@ -40,6 +40,8 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   }
   public productsdDatas: Array<GetAllProductsResponse> = []
 
+  public saleProductSelected!: GetAllProductsResponse;
+
   public addProductEvent = ProductEvent.ADD_PRODUCT_ITEM
   public editProductEvent = ProductEvent.EDIT_PRODUCT_ITEM
   public saleProductEvent = ProductEvent.SALE_PRODUCT_ITEM
@@ -59,6 +61,11 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     price: ['', Validators.required],
     description: ['', Validators.required],
     category_id: ['', Validators.required],
+    amount: [0, Validators.required],
+  })
+
+  public productSaleForm = this.formBuilder.group({
+    product_id: ['', Validators.required],
     amount: [0, Validators.required],
   })
 
@@ -101,6 +108,11 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   private productsGetallObservableHandler = {
     next: (resp: Array<GetAllProductsResponse>) => this.handleSuccessProductGetAll(resp),
     error: (error: HttpErrorResponse) => this.handleErrorProductGetAll(error),
+  }
+
+  private productsSaleObservableHandler = {
+    next: () => this.handleSuccessProductSale(),
+    error: (error: HttpErrorResponse) => this.handleErrorProductSale(error),
   }
 
   private getProductToEdit() {
@@ -216,6 +228,40 @@ export class ProductFormComponent implements OnInit, OnDestroy {
       severity: 'error',
       summary: 'Erro',
       detail: 'Erro ao criar produto.',
+      life: 2000
+    });
+  }
+
+  handleSubmitSaleProduct():void {
+    if(!this.productSaleForm?.value || this.productSaleForm.invalid) return
+    this.productsService
+      .saleProduct({
+        product_id: this.productSaleForm.value.product_id as string,
+        amount: Number(this.productSaleForm.value.amount),
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(this.productsSaleObservableHandler)
+  }
+
+  private handleSuccessProductSale() {
+    this.productSaleForm.reset()
+    this.getProductDatas()
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Produto vendido com sucesso.',
+      life: 2000
+    });
+    this.router.navigate(['/dashboard'])
+  }
+
+  private handleErrorProductSale(error: HttpErrorResponse) {
+    console.log(error.error)
+    this.productSaleForm.reset()
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Erro',
+      detail: 'Erro ao vender produto.',
       life: 2000
     });
   }

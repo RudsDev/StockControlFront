@@ -12,6 +12,8 @@ import { CreateProductRequest } from '../../models/interfaces/products/request/C
 import { CreateProductResponse } from '../../models/interfaces/products/response/CreateProductResponse';
 import { EditProductRequest } from '../../models/interfaces/products/request/EditProductRequest';
 import { EditProductResponse } from '../../models/interfaces/products/response/EditProductResponse';
+import { SaleProductRequest } from '../../models/interfaces/products/request/SaleProductRequest';
+import { SaleProductResponse } from '../../models/interfaces/products/response/SaleProductResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -59,6 +61,21 @@ export class ProductsService {
       `${this.API_URL}/product/edit`,
       productData,
       this.httpOptions
+    )
+  }
+
+  saleProduct(saleData: SaleProductRequest): Observable<SaleProductResponse> {
+    return this.http.put<SaleProductResponse>(
+      `${this.API_URL}/product/sale`,
+      {
+        amount: saleData.amount
+      },
+      {
+        ...this.httpOptions,
+        params: {
+          product_id: saleData.product_id
+        }
+      },
     )
   }
 }
