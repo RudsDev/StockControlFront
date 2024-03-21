@@ -1,6 +1,6 @@
 import { environment } from '../../../environments/environment';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SignupUserRequest } from '../../models/interfaces/user/SignupUserRequest';
 import { SignupUserResponse } from '../../models/interfaces/user/SignupUserRespose';
@@ -17,8 +17,22 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnDestroy {
+export class HomeComponent implements OnDestroy, AfterViewInit {
   private readonly destroy$: Subject<void> = new Subject()
+
+  @ViewChild('emailInputHome') public emailInputHomeRef!: ElementRef
+  @ViewChild('passwordInputHome') public passwordInputHomeef!: ElementRef
+
+  ngAfterViewInit(): void {
+    /* Só estarão disponíveis para acesso após a renderização do HTML*/
+    this.emailInputHomeRef.nativeElement.value = 'Seu e-mail aqui'
+    this.passwordInputHomeef.nativeElement.value = 'Sua senha aqui'
+    console.log(
+      this.emailInputHomeRef.nativeElement.value,
+      this.passwordInputHomeef.nativeElement.value
+    )
+  }
+
   loginCard = true
 
   loginForm = this.formBuilder.group({
